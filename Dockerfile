@@ -11,19 +11,25 @@ ENV FILE_NODE="${FILENAME_NODE}.tar.xz"
 
 RUN set -xe \
     && yum update -y \
-    && yum install wget curl unzip xz -y \
-    && ERLANG_URL_DOWNLOAD=https://github.com/rabbitmq/erlang-rpm/releases/download/v${VER_ERLANG}/${FILE_ERLANG} \
-    && ELIXIR_URL_DOWNLOAD=https://github.com/elixir-lang/elixir/releases/download/v${VER_ELIXIR}/${FILE_ELIXIR} \
-    && NODE_URL_DOWNLOAD=https://nodejs.org/dist/v${VER_NODE}/${FILE_NODE} \
-    && wget ${ERLANG_URL_DOWNLOAD} \
+    && yum install wget curl unzip xz git -y \
+    && wget https://github.com/rabbitmq/erlang-rpm/releases/download/v${VER_ERLANG}/${FILE_ERLANG} \
     && yum localinstall ${FILE_ERLANG} -y \
     && rm ${FILE_ERLANG} \
-    && wget ${ELIXIR_URL_DOWNLOAD} \
+    && wget https://github.com/elixir-lang/elixir/releases/download/v${VER_ELIXIR}/${FILE_ELIXIR} \
     && unzip ${FILE_ELIXIR} -d /opt/elixir \
     && rm ${FILE_ELIXIR} \
     && mkdir -p /opt/node && mkdir -p ${FILENAME_NODE} \
-    && curl -sSL ${NODE_URL_DOWNLOAD} | tar -C ${FILENAME_NODE} -xJ \
+    && curl -sSL https://nodejs.org/dist/v${VER_NODE}/${FILE_NODE} | tar -C ${FILENAME_NODE} -xJ \
     && mv ${FILENAME_NODE}/${FILENAME_NODE}/* /opt/node/
 
 RUN echo -e '\nexport PATH=/opt/elixir/bin:$PATH' >> ~/.bashrc \
-    && echo -e '\nexport PATH=/opt/node/bin:$PATH' >> ~/.bashrc
+    && echo -e '\nexport PATH=/opt/node/bin:$PATH' >> ~/.bashrc 
+
+ENV PATH=/opt/elixir/bin:/opt/node/bin:$PATH
+
+WORKDIR /app
+
+COPY mix.* /app/
+
+RUN mix local.hex --force
+RUN mix deps.get
