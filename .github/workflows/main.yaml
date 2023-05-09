@@ -1,0 +1,36 @@
+name: Docker Build and scan
+on:
+  push:
+    branches:
+      - "main"
+jobs:
+  docker_build:
+    name: "Build docker deploy to docker hub"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t v3dotcash/elixir-redhat-builder:latest .
+          echo "::set-output name=v3dotcash/elixir-redhat-builder:latest"
+      - name: Set up Clair
+        shell: bash
+        run: |
+          curl -L \
+          https://github.com/arminc/clair-scanner/releases/download/v12/clair-scanner_linux_amd64 \
+          -o clair-scanner && \
+          chmod +x ./clair-scanner
+          docker run -p 5432:5432 -d --name db arminc/clair-db:latest
+          docker run -p 6060:6060 --link db:postgres -d --name clair arminc/clair-local-scan:latest
+      - name: Scan image with Clair
+        env:
+
+          IMAGE_TAG: ${{ github.sha }}       
+        shell: bash
+        run: |
+          ip=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+          ./clair-scanner --ip $ip -w clair_whitelist.yml v3dotcash/elixir-redhat-builder:latest 
