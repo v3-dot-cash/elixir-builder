@@ -2,7 +2,7 @@ name: Docker Build and scan
 on:
   push:
     branches:
-      - "main"
+      - "*"
 jobs:
   docker_build:
     name: "Build docker deploy to docker hub"
