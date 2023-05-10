@@ -22,6 +22,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t v3dotcash/elixir-redhat-builder:latest .
+          docker push v3dotcash/elixir-redhat-builder:latest
           echo "::set-output name=v3dotcash/elixir-redhat-builder:latest"
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
