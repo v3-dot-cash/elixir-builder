@@ -29,7 +29,8 @@ ENV PATH=/opt/elixir/bin:/opt/node/bin:$PATH
 
 WORKDIR /app
 
-COPY mix.* /app/
+COPY mix.exs /app/
 
-RUN mix local.hex --force
+RUN mix local.hex --force && \
+    mix local.rebar --force
 RUN mix deps.get
