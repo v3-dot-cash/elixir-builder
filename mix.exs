@@ -40,8 +40,12 @@ defmodule ElixirDockerBBuilder.MixProject do
       {:paper_trail, "~> 1.0.0"},
       {:tesla, "~> 1.5"},
       {:hackney, "~> 1.10"},
-      {:inflex, "~> 2.0.0"},
-      {:domo, "~> 1.5"}
+      {:inflex, "~> 2.1"},
+      {:domo, "~> 1.5"},
+      {:polymorphic_embed, "~> 3.0.5"},
+      {:ymlr, "~> 2.0"},
+      {:ex_open_api_utils, "~> 0.5.1"},
+      {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false}
     ]
   end
 end
