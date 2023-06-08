@@ -45,7 +45,11 @@ defmodule ElixirDockerBBuilder.MixProject do
       {:polymorphic_embed, "~> 3.0.5"},
       {:ymlr, "~> 2.0"},
       {:ex_open_api_utils, "~> 0.5.1"},
-      {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false}
+      {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false},
+      {:typed_struct, "~> 0.3.0"},
+      {:lcov_ex, "~> 0.3", only: [:dev, :test], runtime: false},
+      {:mox, "~> 1.0", only: :test},
+      {:timex, "~> 3.7"}
     ]
   end
 end
