@@ -40,7 +40,7 @@ jobs:
       - name: Run NeuVector vulnerability scanner
         uses: neuvector/scan-action@main
         with:
-          image-repository: registry.organization.com/org/image-name
-          image-tag: ${{ github.sha }}
+          image-repository: "v3dotcash/elixir-redhat-builder"
+          image-tag: ${{env.DOCKER_VER_TAG}}
           min-high-cves-to-fail: "1"
           min-medium-cves-to-fail: "1"
