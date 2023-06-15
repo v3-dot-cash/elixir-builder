@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - "*"
+env:
+  DOCKER_VER_TAG: 1.14.0
+  
 jobs:
   docker_build:
     name: "Build docker deploy to docker hub"
@@ -21,13 +24,13 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t v3dotcash/elixir-redhat-builder:1.14 .
-          docker push v3dotcash/elixir-redhat-builder:1.14
-          echo "::set-output name=v3dotcash/elixir-redhat-builder:1.14"
+          docker build -t v3dotcash/elixir-redhat-builder:$DOCKER_VER_TAG .
+          docker push v3dotcash/elixir-redhat-builder:$DOCKER_VER_TAG
+          echo "::set-output name=v3dotcash/elixir-redhat-builder:$DOCKER_VER_TAG"
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-            image-ref: 'v3dotcash/elixir-redhat-builder:1.14'
+            image-ref: "v3dotcash/elixir-redhat-builder:$DOCKER_VER_TAG"
             format: 'table'
             exit-code: '1'
             ignore-unfixed: true
