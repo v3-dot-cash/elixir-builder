@@ -30,7 +30,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-            image-ref: "v3dotcash/elixir-redhat-builder:$DOCKER_VER_TAG"
+            image-ref: "v3dotcash/elixir-redhat-builder:${{env.DOCKER_VER_TAG}}"
             format: 'table'
             exit-code: '1'
             ignore-unfixed: true
