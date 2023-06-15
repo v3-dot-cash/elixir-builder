@@ -37,3 +37,10 @@ jobs:
             vuln-type: 'os,library'
             severity: 'CRITICAL,HIGH'
             scanners: vuln
+      - name: Run NeuVector vulnerability scanner
+        uses: neuvector/scan-action@main
+        with:
+          image-repository: registry.organization.com/org/image-name
+          image-tag: ${{ github.sha }}
+          min-high-cves-to-fail: "1"
+          min-medium-cves-to-fail: "1"
