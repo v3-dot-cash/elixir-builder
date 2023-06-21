@@ -48,7 +48,8 @@ defmodule ElixirDockerBBuilder.MixProject do
       {:typed_struct, "~> 0.3.0"},
       {:lcov_ex, "~> 0.3", only: [:dev, :test], runtime: false},
       {:mox, "~> 1.0", only: :test},
-      {:timex, "~> 3.7"}
+      {:timex, "~> 3.7"},
+      {:nestru, "~> 0.3.3"}
     ]
   end
 end
