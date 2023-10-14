@@ -4,7 +4,7 @@ on:
     branches:
       - "*"
 env:
-  DOCKER_VER_TAG: 1.14.0
+  DOCKER_VER_TAG: 1.14.1-rc.0
   
 jobs:
   security:
