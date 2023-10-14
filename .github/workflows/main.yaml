@@ -1,8 +1,6 @@
 name: Docker Build and scan
 on:
-  push:
-    branches:
-      - "*"
+  push
 env:
   DOCKER_VER_TAG: 1.14.1-rc.0
   
