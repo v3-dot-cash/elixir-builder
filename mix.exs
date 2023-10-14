@@ -29,10 +29,12 @@ defmodule ElixirDockerBBuilder.MixProject do
       {:jason, "~> 1.2"},
       {:faker, "~> 0.17"},
       {:ex_machina, "~> 2.7.0", only: :test},
+      {:mimic, "~> 1.7", only: :test},
       {:junit_formatter, "~> 3.3", only: :test},
       {:plug_cowboy, "~> 2.5"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:canary, "~> 1.1.1"},
+      {:mock, "~> 0.3.8", only: :test},
       {:money, "~> 1.12"},
       {:mix_audit, "~> 2.0", only: [:dev, :test], runtime: false},
       {:oban, "~> 2.14.2"},
@@ -43,13 +45,19 @@ defmodule ElixirDockerBBuilder.MixProject do
       {:domo, "~> 1.5"},
       {:polymorphic_embed, "~> 3.0.5"},
       {:ymlr, "~> 2.0"},
-      {:ex_open_api_utils, "~> 0.5.2"},
+      {:ex_open_api_utils, "~> 0.7.3"},
       {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false},
       {:typed_struct, "~> 0.3.0"},
       {:lcov_ex, "~> 0.3", only: [:dev, :test], runtime: false},
       {:mox, "~> 1.0", only: :test},
       {:timex, "~> 3.7"},
-      {:nestru, "~> 0.3.3"}
+      {:nestru, "~> 0.3.3"},
+      {:ecto_enum, "~> 1.4"},
+      {:logger_json, "~> 5.1"},
+      {:unplug, "~> 1.0.0"},
+      {:ex_doc, "~> 0.29", runtime: false},
+      {:ex_phone_number, "~> 0.4.2"},
+      {:paginator, "~> 1.2"}
     ]
   end
 end
