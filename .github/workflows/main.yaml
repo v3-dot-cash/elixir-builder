@@ -3,8 +3,6 @@ on:
   push
 env:
   DOCKER_VER_TAG: 1.14.1-rc.0
-  OTP_VERSION: 25.0.4
-  ELIXIR_VERSION: 1.14.2
   
 jobs:
   docker_build:
