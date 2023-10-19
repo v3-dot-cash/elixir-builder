@@ -6,7 +6,7 @@ ENV VER_ELIXIR="1.15.7"
 ENV VER_NODE="18.14.2"
 ENV DUMMY_VER="1.0"
 ENV FILE_ERLANG="erlang-${VER_ERLANG}-1.el8.x86_64.rpm"
-ENV FILE_ELIXIR="elixir-otp.zip"
+ENV FILE_ELIXIR="elixir-otp-26.zip"
 ENV FILENAME_NODE="node-v${VER_NODE}-linux-x64"
 ENV FILE_NODE="${FILENAME_NODE}.tar.xz"
 
