@@ -32,8 +32,8 @@ ARG USER_GID=$USER_UID
 RUN groupadd -g $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
 
-RUN mkdir /app \
-    chown -R ${USERNAME}:${USERNAME} /app 
+RUN mkdir /app
+RUN chown -R ${USERNAME}:${USERNAME} /app 
 
 # Actions as non-root user
 USER ${USERNAME}
