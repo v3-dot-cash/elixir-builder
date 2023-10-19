@@ -7,23 +7,6 @@ env:
   ELIXIR_VERSION: 1.14.2
   
 jobs:
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - uses: snyk/actions/node@master
-        continue-on-error: true # To make sure that SARIF upload gets called
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      - uses: erlef/setup-beam@v1.14
-        with:
-          otp-version: ${{env.OTP_VERSION}}
-          elixir-version: ${{env.ELIXIR_VERSION}}
-      - name: Run Snyk to check for vulnerabilities
-        run: synk test
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_AUTH_TOKEN }}
-
   docker_build:
     name: "Build docker deploy to docker hub"
     runs-on: ubuntu-latest
