@@ -33,7 +33,7 @@ RUN groupadd -g $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
 
 RUN mkdir /app \
-    RUN chown -R ${USERNAME}:${USERNAME} /app 
+    chown -R ${USERNAME}:${USERNAME} /app 
 
 # Actions as non-root user
 USER ${USERNAME}
