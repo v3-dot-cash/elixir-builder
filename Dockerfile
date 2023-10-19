@@ -41,7 +41,8 @@ ENV PATH=/opt/elixir/bin:/opt/node/bin:$PATH
 
 WORKDIR /app
 
-COPY mix.exs /app/
+COPY mix.exs /app
+RUN chown -R ${USERNAME}:${USERNAME} /app
 
 RUN mix local.hex --force && \
     mix local.rebar --force
