@@ -23,6 +23,17 @@ RUN set -xe \
     && curl -sSL https://nodejs.org/dist/v${VER_NODE}/${FILE_NODE} | tar -C ${FILENAME_NODE} -xJ \
     && mv ${FILENAME_NODE}/${FILENAME_NODE}/* /opt/node/
 
+# This Dockerfile adds a non-root user
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# Create the user
+RUN groupadd -g $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
+
+USER ${USERNAME}
+
 RUN echo -e '\nexport PATH=/opt/elixir/bin:$PATH' >> ~/.bashrc \
     && echo -e '\nexport PATH=/opt/node/bin:$PATH' >> ~/.bashrc 
 
