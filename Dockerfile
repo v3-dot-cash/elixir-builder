@@ -33,6 +33,7 @@ RUN groupadd -g $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
 
 RUN mkdir /app
+COPY mix.exs /app
 RUN chown -R ${USERNAME}:${USERNAME} /app 
 
 # Actions as non-root user
@@ -44,8 +45,6 @@ RUN echo -e '\nexport PATH=/opt/elixir/bin:$PATH' >> ~/.bashrc \
 ENV PATH=/opt/elixir/bin:/opt/node/bin:$PATH
 
 WORKDIR /app
-
-COPY mix.exs /app
 
 RUN mix local.hex --force && \
     mix local.rebar --force
