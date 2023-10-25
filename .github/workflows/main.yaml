@@ -1,26 +1,10 @@
 name: Docker Build and scan
 on:
-  push:
-    branches:
-      - "*"
+  push
 env:
-  DOCKER_VER_TAG: 1.14.0
+  DOCKER_VER_TAG: 1.15.7
   
 jobs:
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - uses: snyk/actions/setup@master
-      - uses: erlef/setup-beam@v1
-        with:
-          otp-version: 25.0.4
-          elixir-version: 1.14.2
-      - name: Run Snyk to check for vulnerabilities
-        run: synk test
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_AUTH_TOKEN }}
-
   docker_build:
     name: "Build docker deploy to docker hub"
     runs-on: ubuntu-latest

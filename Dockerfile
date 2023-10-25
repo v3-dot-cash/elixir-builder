@@ -1,12 +1,12 @@
-FROM redhat/ubi8:8.7
+FROM redhat/ubi8:8.8
 
 ENV LANG=en_US.UTF-8
-ENV VER_ERLANG="25.0.4"
-ENV VER_ELIXIR="1.14.2"
+ENV VER_ERLANG="26.1.2"
+ENV VER_ELIXIR="1.15.7"
 ENV VER_NODE="18.14.2"
 ENV DUMMY_VER="1.0"
 ENV FILE_ERLANG="erlang-${VER_ERLANG}-1.el8.x86_64.rpm"
-ENV FILE_ELIXIR="elixir-otp-25.zip"
+ENV FILE_ELIXIR="elixir-otp-26.zip"
 ENV FILENAME_NODE="node-v${VER_NODE}-linux-x64"
 ENV FILE_NODE="${FILENAME_NODE}.tar.xz"
 
@@ -23,14 +23,28 @@ RUN set -xe \
     && curl -sSL https://nodejs.org/dist/v${VER_NODE}/${FILE_NODE} | tar -C ${FILENAME_NODE} -xJ \
     && mv ${FILENAME_NODE}/${FILENAME_NODE}/* /opt/node/
 
+# This Dockerfile adds a non-root user
+ENV USERNAME=vscode
+ENV USER_UID=1000
+ENV USER_GID=$USER_UID
+
+# Create the user
+RUN groupadd -g $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
+
+RUN mkdir /app
+COPY mix.exs /app
+RUN chown -R ${USERNAME}:${USERNAME} /app 
+
+# Actions as non-root user
+USER ${USERNAME}
+
 RUN echo -e '\nexport PATH=/opt/elixir/bin:$PATH' >> ~/.bashrc \
     && echo -e '\nexport PATH=/opt/node/bin:$PATH' >> ~/.bashrc 
 
 ENV PATH=/opt/elixir/bin:/opt/node/bin:$PATH
 
 WORKDIR /app
-
-COPY mix.exs /app/
 
 RUN mix local.hex --force && \
     mix local.rebar --force
