@@ -4,11 +4,10 @@ defmodule ElixirDockerBBuilder.MixProject do
   def project do
     [
       app: :elixir_docker_builder,
-      version: "0.1.0",
-      elixir: "~> 1.14",
-      release_date: ~D[2023-02-16],
+      version: "0.4.1",
+      elixir: "~> 1.15",
+      release_date: ~D[2023-09-15],
       compilers: [:domo_compiler] ++ Mix.compilers(),
-      start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
   end

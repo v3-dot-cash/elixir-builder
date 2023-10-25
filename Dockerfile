@@ -1,4 +1,4 @@
-FROM redhat/ubi8:8.7
+FROM redhat/ubi8:8.8
 
 ENV LANG=en_US.UTF-8
 ENV VER_ERLANG="26.1.2"
@@ -24,9 +24,9 @@ RUN set -xe \
     && mv ${FILENAME_NODE}/${FILENAME_NODE}/* /opt/node/
 
 # This Dockerfile adds a non-root user
-ARG USERNAME=vscode
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
+ENV USERNAME=vscode
+ENV USER_UID=1000
+ENV USER_GID=$USER_UID
 
 # Create the user
 RUN groupadd -g $USER_GID $USERNAME \
