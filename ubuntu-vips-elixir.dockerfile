@@ -7,5 +7,5 @@ RUN npm install -g n
 RUN n lts 
 RUN npx -y @puppeteer/browsers install chrome@stable 
 RUN npx -y @puppeteer/browsers install chromedriver@stable 
-RUN ln -s /chrome/linux-127.0.6533.88/chrome-linux64/chrome /usr/local/bin/chrome
-RUN ln -s /chromedriver/linux-127.0.6533.88/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+RUN ln -s /chrome/linux-129.0.6668.70/chrome-linux64/chrome /usr/local/bin/chrome
+RUN ln -s /chromedriver/linux-129.0.6668.70/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
