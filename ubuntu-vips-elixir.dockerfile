@@ -5,9 +5,10 @@ RUN apt update && apt install -y --no-install-recommends libvips-dev make g++ wg
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && ./aws/install
 RUN apt install -y postgresql-client
 RUN apt install -y less
+RUN apt install -y git
 RUN npm install -g n
 RUN n lts 
 RUN npx -y @puppeteer/browsers install chrome@stable 
 RUN npx -y @puppeteer/browsers install chromedriver@stable 
-RUN ln -s /chrome/linux-129.0.6668.70/chrome-linux64/chrome /usr/local/bin/chrome
-RUN ln -s /chromedriver/linux-129.0.6668.70/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+RUN ln -s /chrome/linux-129.0.6668.89/chrome-linux64/chrome /usr/local/bin/chrome
+RUN ln -s /chromedriver/linux-129.0.6668.89/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
