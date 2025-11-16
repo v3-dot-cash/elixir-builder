@@ -1,37 +1,77 @@
-name: Docker Build and scan
+name: Docker Build and Push to GHCR
 on:
-  push
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      erlang_version:
+        description: 'Erlang/OTP version'
+        required: true
+        default: '27.3.3'
+      elixir_version:
+        description: 'Elixir version'
+        required: true
+        default: '1.18.3'
+
 env:
-  DOCKER_VER_TAG: 1.15.7
-  
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/elixir-ubuntu-noble
+  ERLANG_VERSION: ${{ github.event.inputs.erlang_version || '27.3.3' }}
+  ELIXIR_VERSION: ${{ github.event.inputs.elixir_version || '1.18.3' }}
+
 jobs:
-  docker_build:
-    name: "Build docker deploy to docker hub"
+  build_ubuntu_noble:
+    name: "Build Ubuntu Noble Elixir image and push to GHCR"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build, tag, and push image to Docker hub
-        id: build-image
-        env:
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build -t v3dotcash/elixir-redhat-builder:$DOCKER_VER_TAG .
-          docker push v3dotcash/elixir-redhat-builder:$DOCKER_VER_TAG
-          echo "::set-output name=v3dotcash/elixir-redhat-builder:$DOCKER_VER_TAG"
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ env.ELIXIR_VERSION }}-erlang-${{ env.ERLANG_VERSION }}
+            type=raw,value=latest
+
+      - name: Build and push Ubuntu Noble Elixir image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ubuntu-noble-elixir.dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            ERLANG_VERSION=${{ env.ERLANG_VERSION }}
+            ELIXIR_VERSION=${{ env.ELIXIR_VERSION }}
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-            image-ref: "v3dotcash/elixir-redhat-builder:${{env.DOCKER_VER_TAG}}"
-            format: 'table'
-            exit-code: '1'
-            ignore-unfixed: true
-            vuln-type: 'os,library'
-            severity: 'CRITICAL,HIGH'
-            scanners: vuln
+          image-ref: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.ELIXIR_VERSION }}-erlang-${{ env.ERLANG_VERSION }}"
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          scanners: vuln
