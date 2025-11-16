@@ -73,15 +73,24 @@ RUN erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().' -noshel
 RUN mix local.hex --force && \
     mix local.rebar --force
 
-# Create non-root user
+# Create non-root user (rename ubuntu user if exists, or create vscode user)
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 RUN apt-get update \
     && apt-get install -y sudo \
-    && groupadd --gid $USER_GID $USERNAME || true \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME || true \
+    # Check if ubuntu user exists with UID 1000 and rename it to vscode
+    && if id ubuntu &>/dev/null; then \
+        usermod -l $USERNAME ubuntu && \
+        groupmod -n $USERNAME ubuntu && \
+        usermod -d /home/$USERNAME -m $USERNAME && \
+        echo "$USERNAME renamed from ubuntu user"; \
+    elif ! id $USERNAME &>/dev/null; then \
+        groupadd --gid $USER_GID $USERNAME && \
+        useradd --uid $USER_UID --gid $USER_GID -m $USERNAME && \
+        echo "$USERNAME user created"; \
+    fi \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && rm -rf /var/lib/apt/lists/*
